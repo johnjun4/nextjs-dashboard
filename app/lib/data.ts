@@ -67,7 +67,6 @@ export async function fetchCardData() {
       customerCountPromise,
       invoiceStatusPromise,
     ]);
-    console.log('✅ - data:', data)
 
     const numberOfInvoices = Number(data[0][0].count ?? '0');
     const numberOfCustomers = Number(data[1][0].count ?? '0');
@@ -155,11 +154,13 @@ export async function fetchInvoiceById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const invoice = data.map((invoice) => ({
-      ...invoice,
-      // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
-    }));
+    const invoice = data.map((invoice) => {
+      return {
+        ...invoice,
+        // Convert amount from cents to dollars
+        amount: invoice.amount / 100,
+      };
+    });
 
     return invoice[0];
   } catch (error) {
